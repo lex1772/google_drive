@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,7 +12,10 @@ class DocumentAPIView(APIView):
 
     def post(self, request):
         """Метод POST, который приниямает на вход JSON с названием файла и содержимым"""
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except JSONDecodeError:
+            return Response("Нет данных")
         if check_names(data):
             return Response(google_docs(data, google_drive(data)))
         return Response("Переданы не верные данные")
