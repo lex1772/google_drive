@@ -4,7 +4,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 # Данные для входа в сервисный аккаунт
-scopes = ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive',
+scopes = ['https://www.googleapis.com/auth/drive.file',
+          'https://www.googleapis.com/auth/drive',
           'https://www.googleapis.com/auth/documents']
 service_account_file = os.getenv('SERVICE_ACCOUNT_FILE')
 credentials = service_account.Credentials.from_service_account_file(
@@ -44,8 +45,10 @@ def google_docs(data: dict, file_id):
     ]
 
     try:
-        docs_service.documents().batchUpdate(documentId=file_id,
-                                             body={'requests': requests}).execute()
+        docs_service.documents().batchUpdate(
+            documentId=file_id,
+            body={'requests': requests}
+        ).execute()
     except Exception:
         return "Не удалось создать файл"
     else:
